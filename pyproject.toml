@@ -1,0 +1,37 @@
+[project]
+name = "hexagonal-ddd-app"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "ToanBan",email = "letoanban.word@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13,<4"
+dependencies = [
+    "fastapi (>=0.136.3,<0.137.0)",
+    "granian (>=2.7.4,<3.0.0)",
+    "pydantic (>=2.13.4,<3.0.0)",
+    "pydantic-settings (>=2.14.1,<3.0.0)",
+    "dependency-injector (>=4.49.0,<5.0.0)",
+    "sqlalchemy (>=2.0.50,<3.0.0)",
+    "asyncpg (>=0.31.0,<0.32.0)",
+    "redis (>=7.4.0,<8.0.0)",
+    "alembic (>=1.18.4,<2.0.0)",
+    "httpx (>=0.28.1,<0.29.0)",
+    "taskiq-aio-pika (>=0.6.0,<0.7.0)",
+    "taskiq-redis (>=1.2.2,<2.0.0)",
+    "miniopy-async (>=1.23.5,<2.0.0)"
+]
+
+[tool.poetry]
+packages = [{include = "hexagonal_ddd_app", from = "src"}]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "ruff (>=0.15.14,<0.16.0)",
+    "pytest (>=9.0.3,<10.0.0)"
+]
