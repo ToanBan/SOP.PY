@@ -2,7 +2,6 @@ from src.modules.chat.core.application.port.input.i_save_token_usecase import Sa
 from src.modules.chat.core.application.port.output.i_facebook_client import IFacebookClient
 from src.modules.chat.core.application.port.output.i_channel_account import ChannelAccountRepositoryInterface
 from src.modules.chat.core.domain.entity.channel_account import ChannelAccount
-from src.modules.chat.adapter.http.dtos.channel_account_schema import AddChannelAccountRequest
 
 
 class SaveFacebookTokenUseCase(SaveFacebookTokeUseCaseInterface):

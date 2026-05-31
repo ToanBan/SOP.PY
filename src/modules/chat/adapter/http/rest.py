@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, Query, HTTPException, Request
 from src.modules.chat.adapter.http.dtos.channel_account_schema import AddChannelAccountRequest
 from src.modules.chat.core.application.port.input.i_save_token_usecase import SaveFacebookTokeUseCaseInterface
-from src.modules.chat.core.application.usecase.find_channel_account import FindChannelAccountByChannelAccountUseCase
 from src.modules.chat.adapter.http.tasks import process_facebook_webhook
 from src.modules.chat.core.application.dtos.save_facebook_token import SaveFacebookTokenDTO
+from src.modules.chat.core.application.port.input.i_find_channel_byid import FindChannelByIdUseCaseInterface
 from src.pkg.broker import broker
 from src.modules.chat.adapter.dependencies.channel_account import get_save_facebook_token_use_case, get_find_channel_account_use_case
 router = APIRouter(prefix="/channel-accounts", tags=["Channel Accounts"])
@@ -23,6 +23,7 @@ async def receive_webhook(request: Request):
     data = await request.json()
     print("Webhook received:", data)
     task = await process_facebook_webhook.kiq(data)
+    print(f"Task enqueued with ID: {task.task_id}")
     return {"status": "ok", "task_id": task.task_id}
 
 
@@ -51,7 +52,7 @@ async def add_channel_account(
 @router.get("/{page_id}")
 async def get_channel_account(
     page_id: str,
-    use_case: FindChannelAccountByChannelAccountUseCase = Depends(get_find_channel_account_use_case)
+    use_case: FindChannelByIdUseCaseInterface = Depends(get_find_channel_account_use_case)
 ):
     channel_account = await use_case.execute(page_id)
     if channel_account is None:
