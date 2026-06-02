@@ -16,6 +16,8 @@ from src.modules.chat.core.application.usecase.save_facebook_usecase import Save
 from src.modules.chat.core.application.usecase.find_channel_account import FindChannelAccountByChannelAccountUseCase
 from src.modules.chat.core.application.port.input.i_process_facebook_message import ProcessFacebookMessageInterface
 from src.modules.chat.core.application.usecase.process_facebook_message import ProcessFacebookMessageUseCase
+from src.modules.chat.core.application.port.input.i_enqueue_facebook_webhook import EnqueueFacebookWebhookUseCaseInterface
+from src.modules.chat.core.application.usecase.enqueue_facebook_webhook import EnqueueFacebookWebhookUseCase
 def get_channel_account_repository(
     session: AsyncSession = Depends(get_db_session)
 ) -> ChannelAccountRepositoryInterface:
@@ -51,3 +53,8 @@ def get_process_message_use_case(
             provide_channel_account_repo(session)
         ),
     )
+
+
+def get_enqueue_facebook_webhook_use_case(
+) -> EnqueueFacebookWebhookUseCaseInterface:
+    return EnqueueFacebookWebhookUseCase()

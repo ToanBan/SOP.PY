@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends, Query, HTTPException, Request
 from src.modules.chat.adapter.http.dtos.channel_account_schema import AddChannelAccountRequest
 from src.modules.chat.core.application.port.input.i_save_token_usecase import SaveFacebookTokeUseCaseInterface
-from src.modules.chat.adapter.http.tasks import process_facebook_webhook
 from src.modules.chat.core.application.dtos.save_facebook_token import SaveFacebookTokenDTO
 from src.modules.chat.core.application.port.input.i_find_channel_byid import FindChannelByIdUseCaseInterface
 from src.pkg.broker import broker
-from src.modules.chat.adapter.dependencies.channel_account import get_save_facebook_token_use_case, get_find_channel_account_use_case
+from src.modules.chat.adapter.dependencies.channel_account import get_save_facebook_token_use_case, get_find_channel_account_use_case, get_enqueue_facebook_webhook_use_case
+from src.modules.chat.core.application.usecase.enqueue_facebook_webhook import EnqueueFacebookWebhookUseCase
+from src.modules.chat.core.application.port.input.i_enqueue_facebook_webhook import EnqueueFacebookWebhookUseCaseInterface
 router = APIRouter(prefix="/channel-accounts",tags=["Channel Accounts"])
 
 @router.get("/webhooks/facebook")
@@ -19,12 +20,13 @@ async def verify_webhook(
     raise HTTPException(status_code=403, detail="Verification failed")
 
 @router.post("/webhooks/facebook")
-async def receive_webhook(request: Request):
+async def receive_webhook(request: Request, use_case: EnqueueFacebookWebhookUseCaseInterface = Depends(
+        get_enqueue_facebook_webhook_use_case
+    ),):
     data = await request.json()
     print("Webhook received:", data)
-    task = await process_facebook_webhook.kiq(data)
-    print(f"Task enqueued with ID: {task.task_id}")
-    return {"status": "ok", "task_id": task.task_id}
+    await use_case.execute(data)
+    return {"status": "ok"}
 
 
 @router.get("/webhooks/task/{task_id}")
