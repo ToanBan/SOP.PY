@@ -6,7 +6,7 @@ from src.modules.chat.core.application.dtos.save_facebook_token import SaveFaceb
 from src.modules.chat.core.application.port.input.i_find_channel_byid import FindChannelByIdUseCaseInterface
 from src.pkg.broker import broker
 from src.modules.chat.adapter.dependencies.channel_account import get_save_facebook_token_use_case, get_find_channel_account_use_case
-router = APIRouter(prefix="/channel-accounts", tags=["Channel Accounts"])
+router = APIRouter(prefix="/channel-accounts",tags=["Channel Accounts"])
 
 @router.get("/webhooks/facebook")
 async def verify_webhook(

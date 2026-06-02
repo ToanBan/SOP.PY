@@ -8,3 +8,9 @@ class ChannelAccountRepositoryInterface(ABC):
 
     @abstractmethod
     async def find_by_page_id(self, page_id: str) -> ChannelAccount | None: ...
+
+    @abstractmethod
+    async def find_by_page_id(self, page_id: str) -> ChannelAccount | None: ...
+
+    @abstractmethod
+    async def find_channel_account_by_token(self, page_access_token: str) -> ChannelAccount | None: ...

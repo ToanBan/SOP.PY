@@ -61,3 +61,31 @@ class ChannelAccountRepository(ChannelAccountRepositoryInterface):
             created_at=model.created_at,
             updated_at=model.updated_at,
         )
+    
+
+    async def find_channel_account_by_token(
+        self,
+        page_access_token: str,
+    ) -> ChannelAccount | None:
+
+        result = await self.session.execute(
+            select(ChannelAccountModel).where(
+                ChannelAccountModel.page_access_token == page_access_token
+            )
+        )
+
+        model = result.scalar_one_or_none()
+
+        if model is None:
+            return None
+
+        return ChannelAccount(
+            page_id=model.page_id,
+            page_access_token=model.page_access_token,
+            page_name=model.page_name,
+            is_active=model.is_active,
+            created_at=model.created_at,
+            updated_at=model.updated_at,
+        )
+
+    
